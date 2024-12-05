@@ -52,9 +52,7 @@ const HeroSection = () => {
               className="px-1 inline-block py-1 w-full sm:w-fit rounded-full bg-gradient-to-br from-teal-400 to-blue-400 hover:bg-slate-800 text-white mt-3"
             >
               <span className="block bg-[#121212] hover:bg-slate-800 rounded-full px-5 py-2">
-                <a href="/images/CV_.pdf" download="mydocument.pdf">
-                  Download CV
-                </a>
+                Download CV
               </span>
             </Link>
           </div>
