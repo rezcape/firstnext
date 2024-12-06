@@ -26,13 +26,14 @@ const HeroSection = () => {
                 1000,
                 "Web Developer",
                 1000,
-                "Programming Division",
+                "CN-14",
                 1000,
-                "CN-14 Barunastra",
+                "Barunastra",
                 1000,
               ]}
               wrapper="span"
               speed={50}
+              style={{ fontSize: "1em", display: "inline-block" }}
               repeat={Infinity}
             />
           </h1>
