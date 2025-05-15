@@ -56,8 +56,8 @@ const AboutSection = () => {
           <p className="text-base lg:text-lg">
             I am a front end web developer with a passion for creating
             interactive and responsive web applications. I have experience
-            working with JavaScript, React, Node.js, HTML, CSS, and Git. I am a
-            quick learner and I am always look for an opportunity to expand my
+            working with JavaScript, Next-Js, HTML, CSS, and Git. I am a quick
+            learner and I am always look for an opportunity to expand my
             knowledge and skill set . And I am a team player and I am excited to
             work with others to create amazing applications.
           </p>
