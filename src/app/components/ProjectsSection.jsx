@@ -15,6 +15,15 @@ const projectsData = [
       "https://github.com/rzkcp/Ahmad-Syauqi-Reza_LandingPage_WebBarun-.git",
     previewUrl: "https://kopilotfirstpro-luii2zpzr-rzkcps-projects.vercel.app",
   },
+  {
+    id: 2,
+    title: "Next-Js Application Website",
+    description: "Barunastra's Final Project : Build a website using Next-Js",
+    image: "/images/projects/2.png",
+    tag: ["All", "Web"],
+    gitUrl: "https://github.com/rzkcp/fp-barunastra.git",
+    previewUrl: "https://fp-barunastra-62x0eqk46-rzkcps-projects.vercel.app/",
+  },
 ];
 
 const ProjectsSection = () => {
