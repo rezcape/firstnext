@@ -1,11 +1,39 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react"; // ---> ADDED useState and useEffect
 import Image from "next/image";
 import { TypeAnimation } from "react-type-animation";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
 const HeroSection = () => {
+  // ---> START: ADDED STATE AND EFFECT
+  // State to hold the formatted sequence for TypeAnimation
+  const [greetingSequence, setGreetingSequence] = useState([]);
+
+  // Effect to fetch greetings and format them for the sequence
+  useEffect(() => {
+    async function fetchAndSetGreetings() {
+      try {
+        const response = await fetch("/api/greetings");
+        const data = await response.json();
+
+        // Transform the data into the format TypeAnimation needs:
+        // From: [{ greeting: "Hello" }, { greeting: "Hola" }]
+        // To:   ["Hello", 1500, "Hola", 1500]
+        const formattedSequence = data.flatMap((item) => [item.greeting, 1500]); // 1.5-second pause after each
+
+        setGreetingSequence(formattedSequence);
+      } catch (error) {
+        console.error("Failed to fetch greetings:", error);
+        // Set a default sequence in case of an error
+        setGreetingSequence(["Hello!", 1500, "Welcome!", 1500]);
+      }
+    }
+
+    fetchAndSetGreetings();
+  }, []); // The empty array [] means this effect runs only once
+  // ---> END: ADDED STATE AND EFFECT
+
   return (
     <section className="lg:py-16">
       <div className="grid grid-cols-1 sm:grid-cols-12 py-5">
@@ -16,29 +44,25 @@ const HeroSection = () => {
           className="col-span-8 place-self-center text-center sm:text-left justify-self-start"
         >
           <h1 className="text-white mb-4 text-4xl sm:text-5xl lg:text-8xl lg:leading-normal font-extrabold">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-400">
-              Hello, I&apos;m{" "}
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-400 ">
+              I'm Reza
             </span>
             <br></br>
-            <TypeAnimation
-              sequence={[
-                "Reza",
-                1000,
-                "Web Developer",
-                1000,
-                "CN-14",
-                1000,
-                "Barunastra",
-                1000,
-              ]}
-              wrapper="span"
-              speed={25}
-              style={{ fontSize: "1em", display: "inline-block" }}
-              repeat={Infinity}
-            />
+            {/* ---> MODIFIED THIS COMPONENT */}
+            {/* Conditionally render TypeAnimation only when the sequence is ready */}
+            {greetingSequence.length > 0 && (
+              <TypeAnimation
+                sequence={greetingSequence}
+                wrapper="span"
+                speed={25}
+                style={{ fontSize: "1em", display: "inline-block" }}
+                repeat={Infinity}
+              />
+            )}
           </h1>
+          {/* I also fixed the typo in this paragraph for you :) */}
           <p className="text-[#ADB7BE] text-base sm:text-lg mb-6 lg:text-xl">
-            Iam an Undergraduate Information Technology Student at Institut
+            I am an Undergraduate Information Technology Student at Institut
             Teknologi Sepuluh Nopember (ITS)
           </p>
           <div>
