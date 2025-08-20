@@ -1,91 +1,71 @@
 "use client";
-import React, { useState, useRef } from "react";
-import ProjectCard from "./ProjectCard";
-import ProjectTag from "././ProjectTag";
-import { motion, useInView } from "framer-motion";
-
-const projectsData = [
-  {
-    id: 1,
-    title: "Html-CSS Portofolio Website",
-    description: "My First Project",
-    image: "/images/projects/1.png",
-    tag: ["All", "Web"],
-    gitUrl:
-      "https://github.com/rzkcp/Ahmad-Syauqi-Reza_LandingPage_WebBarun-.git",
-    previewUrl: "https://kopilotfirstpro-luii2zpzr-rzkcps-projects.vercel.app",
-  },
-  {
-    id: 2,
-    title: "Next-Js Application Website",
-    description: "Barunastra's Final Project : Build a website using Next-Js",
-    image: "/images/projects/2.png",
-    tag: ["All", "Web"],
-    gitUrl: "https://github.com/rzkcp/fp-barunastra.git",
-    previewUrl: "https://fp-barunastra-62x0eqk46-rzkcps-projects.vercel.app/",
-  },
-];
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { CodeBracketIcon, EyeIcon } from "@heroicons/react/24/outline";
 
 const ProjectsSection = () => {
-  const [tag, setTag] = useState("All");
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+  // State to store your repositories
+  const [repos, setRepos] = useState([]);
+  // State to handle loading status
+  const [loading, setLoading] = useState(true);
 
-  const handleTagChange = (newTag) => {
-    setTag(newTag);
-  };
+  useEffect(() => {
+    // Function to fetch repositories from the GitHub API
+    const fetchRepos = async () => {
+      try {
+        // Replace 'your-github-username' with your actual GitHub username
+        const response = await fetch(
+          "https://api.github.com/users/rezcape/repos?sort=updated&direction=desc"
+        );
+        const data = await response.json();
+        // We'll take the 6 most recently updated repos
+        setRepos(data.slice(0, 6));
+      } catch (error) {
+        console.error("Error fetching GitHub repos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  const filteredProjects = projectsData.filter((project) =>
-    project.tag.includes(tag)
-  );
-
-  const cardVariants = {
-    initial: { y: 50, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-  };
+    fetchRepos();
+  }, []); // The empty array ensures this runs only once on component mount
 
   return (
-    <section id="projects">
-      <h2 className="text-center text-4xl font-bold text-white mt-4 mb-8 md:mb-12">
+    <section id="projects" className="text-white">
+      <h2 className="text-center text-4xl font-bold mt-4 mb-8 md:mb-12">
         My Projects
       </h2>
-      <div className="text-white flex flex-row justify-center items-center gap-2 py-6">
-        <ProjectTag
-          onClick={handleTagChange}
-          name="All"
-          isSelected={tag === "All"}
-        />
-        <ProjectTag
-          onClick={handleTagChange}
-          name="Web"
-          isSelected={tag === "Web"}
-        />
-        <ProjectTag
-          onClick={handleTagChange}
-          name="Mobile"
-          isSelected={tag === "Mobile"}
-        />
-      </div>
-      <ul ref={ref} className="grid md:grid-cols-3 gap-8 md:gap-12">
-        {filteredProjects.map((project, index) => (
-          <motion.li
-            key={index}
-            variants={cardVariants}
-            initial="initial"
-            animate={isInView ? "animate" : "initial"}
-            transition={{ duration: 0.3, delay: index * 0.4 }}
-          >
-            <ProjectCard
-              key={project.id}
-              title={project.title}
-              description={project.description}
-              imgUrl={project.image}
-              gitUrl={project.gitUrl}
-              previewUrl={project.previewUrl}
-            />
-          </motion.li>
-        ))}
-      </ul>
+      <p className="text-center text-lg text-[#ADB7BE] mb-12">
+        A selection of my latest projects pulled directly from my GitHub.
+      </p>
+
+      {loading ? (
+        <p className="text-center">Loading projects...</p>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12">
+          {repos.map((repo) => (
+            <div key={repo.id} className="bg-[#181818] rounded-xl p-6">
+              <h3 className="text-xl font-semibold mb-2">{repo.name}</h3>
+              <p className="text-[#ADB7BE] text-sm h-20 overflow-hidden">
+                {repo.description || "No description available."}
+              </p>
+              <div className="flex items-center justify-between mt-4">
+                <span className="text-sm text-gray-400">
+                  ⭐ {repo.stargazers_count}
+                </span>
+                <Link
+                  href={repo.html_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-teal-400 hover:text-white"
+                >
+                  <CodeBracketIcon className="h-8 w-8" />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   );
 };
